@@ -6,6 +6,7 @@ const app = express ()
 
 app.use(express.json());
 
+// singup api 
 app.post ("/singup", async (req,res)=>{
     const user = new User (req.body)
   //   ({
@@ -58,6 +59,7 @@ res.send(user)
 
 });
 
+//delete user
 app.delete("/delete", async(req,res)=>{
   
   const userId =req.body.userId;
@@ -72,20 +74,35 @@ app.delete("/delete", async(req,res)=>{
   }
 
 })
-app.patch("/update", async(req,res)=>{
 
-const userId = req.body.userId;
+// update user
+app.patch("/user/:userId", async(req,res)=>{
+
+const userId = req.params.userId;
 const data = req.body;
+
 try {
-       await User.findByIdAndUpdate({_id: userId }, data, {returnDocument:"before"});
+      const ALLOWED_UPDATES =[ "photoURL", "about", "gender", "age", "skills"];
+      const isupdatesALOWED = Object.keys(data).every((k)=> 
+      ALLOWED_UPDATES.includes(k)
+    );
+
+  if (!isupdatesALOWED){
+ throw new Error("Updates not allowed");
+ 
+  }
+
+  if(data?.skills.length > 10) {
+    throw new Error("Number of skills should not exceed 10");
+  }
+  await User.findByIdAndUpdate({_id:userId},data, {runValidators:true});
        res.send("user update succefully");
-} catch (error) {
-  res.status(404).send("not update user")
+} catch (err) {
+  res.status(400).send("UPdate failed" + err.message);
     
 }
 
 });
-
 
 connectDB()
 .then( ()=> {
