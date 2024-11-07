@@ -36,7 +36,7 @@ const userShema = new mongoose.Schema(
   },
   password:{
 
-     type:Number,
+     type:String,
      validate(value){
       if(!validator.isStrongPassword(value)){
       throw new Error("please add strong passsword" + value);
@@ -71,11 +71,11 @@ const userShema = new mongoose.Schema(
  photoURL:{
 
   type:String,
-  default:" https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg?size=800x" ,
+  
 
   validate(value){
     if(!validator.isURL(value)){
-    throw new Error("invalide email adress" + value);
+    throw new Error("invalide url adress" + value);
     
 
 }

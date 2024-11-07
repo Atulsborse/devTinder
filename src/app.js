@@ -2,22 +2,37 @@ const express = require('express');
 const connectDB= require("./config/database");
 const User = require('./models/user');
 const app = express ()
+const {validatesingupdata} = require("./utils/validation");
+const bcrypt = require("bcrypt")
+
 
 
 app.use(express.json());
 
 // singup api 
 app.post ("/singup", async (req,res)=>{
-    const user = new User (req.body)
-  //   ({
-  // FirstName:"brock",
-  // LastName:"lesnar",
-  // emailid:"lesnar7@gmail.com",
-  // gender:"Male"
-  //   })
 
     try{
-        await user.save()
+      
+//validation of data 
+validatesingupdata(req);
+
+const {FirstName,LastName ,emailid,password} = req.body;
+    // Encrypt the password
+    const passswordhash =  await bcrypt.hash(password, 10);
+      console.log(passswordhash);
+
+    //  best way to create instace of user
+      const user = new User ({
+       FirstName,
+       LastName,
+       emailid,
+       password:passswordhash,
+
+
+
+      });
+        await user.save();
         res.send("user added succesfuly");
     }
   catch (err){
@@ -25,7 +40,7 @@ app.post ("/singup", async (req,res)=>{
 
           
   }
-})
+});
 
 
 // get all users 
