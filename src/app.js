@@ -4,11 +4,12 @@ const User = require('./models/user');
 const app = express ()
 const {validatesingupdata} = require("./utils/validation");
 const bcrypt = require("bcrypt")
-
-
+const cookieParser = require("cookie-parser"); 
+const jwt =require("jsonwebtoken")
+const {userAuth} =require("./middlewares/auth");
 
 app.use(express.json());
-
+app.use(cookieParser());
 // singup api 
 app.post ("/singup", async (req,res)=>{
 
@@ -41,6 +42,68 @@ const {FirstName,LastName ,emailid,password} = req.body;
           
   }
 });
+
+app.post("/login" , async (req,res) => { 
+
+  
+try {
+  const {emailid, password } = req.body;
+  const user = await User.findOne({emailid:emailid});
+  if(!user) {
+    throw new Error("Invalid credentials");
+  }
+  const ispasswordvalid = await  user.validatePassword( )
+  
+  
+  if(ispasswordvalid){
+
+    // create a jwt token 
+
+ const token =await user.getJWT(); // user schema madhe shift kel 
+ console.log(token) // he token same profile hit kela var bhetal tar thive verify karn padel karn yaat id ahe
+
+    // add the token to cookie and send the responde back to user 
+    res.cookie("token" , token);
+    res.send("login Succesfull!!!")
+  
+  }else{
+  
+    throw new Error("invalid credentials");
+    
+  
+  }
+
+} catch (err) {
+     res.status(400).send("ERROR :" + err.message);
+}
+  
+});
+
+ app.get("/profile",userAuth, async (req,res)=>{
+
+
+ const user = req.user;
+ if(!user){
+  throw new Error("user not exstist");
+  
+}
+//console.log(user);
+
+
+// console.log(cookies);// login madlya cookies ithe acces karto aahe
+res.send(user);
+
+ })
+
+ app.post("/sendconnection",userAuth, async (req, res) => {
+const user =req.user;
+  res.send(user.FirstName+"Connection request sent");
+})
+
+
+
+
+
 
 
 // get all users 
