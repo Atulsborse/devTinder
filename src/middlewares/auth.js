@@ -13,7 +13,7 @@ if(!token){
    throw new Error(" token is invalide");
 
 }
-const decodedvalue = await  jwt.verify(token,"Atul@181523");
+const decodedvalue = await jwt.verify(token,"Atul@181523");
 
 const {_id} = decodedvalue;
 
@@ -32,6 +32,4 @@ next();
 
 }
 
-module.exports = {
-    userAuth
-}
+module.exports = {userAuth}

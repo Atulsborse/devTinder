@@ -17,6 +17,19 @@ const validatesingupdata = (req) => {
      }
 };
 
+     const validateEditedata =(req)=>{
+      const  allowedEditFilds = ["FirstName"  , "LastName" , "emailid","photoURL", "about", "skills","gender"];
+
+    const isEditfieldsallowed = Object.keys(req.body).every((field)=>
+    allowedEditFilds.includes(field)
+); // boject.key aplyaalam filde dete age ,gender,email apn je post man madhe adit dathi takto te 
+    // yachyat je fild dilya aahe tech edit hotil baki error yeil 
+     
+
+    return isEditfieldsallowed;
+    }
+
 module.exports = {
-    validatesingupdata 
+    validatesingupdata ,
+    validateEditedata
 }

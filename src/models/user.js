@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const  validator = require("validator");
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken");
-const userShema = new mongoose.Schema(
+
+const userSchema = new mongoose.Schema(
     {
 
   FirstName:{
@@ -37,7 +38,7 @@ const userShema = new mongoose.Schema(
  },
   },
   password:{
-
+     require:true,
      type:String,
      validate(value){
       if(!validator.isStrongPassword(value)){
@@ -52,20 +53,26 @@ const userShema = new mongoose.Schema(
    min:18
   },
 
-  gender:{
-
+   gender: {
+    // type: String,
+    // enum:{
+    //   values: ["male", "female", "others"],
+    //   message: `{VALUE} "is not a valid gender type` , 
+    // },
+   
  // costome validation
  type:String,
  validate(value){
   if(!["male","female","others"].includes(value)){
-    throw new Error("gender validation fail")
+    throw new Error("gender is not valid")
   }
  }
 },
+  
 
   skills:{
    
-    type:String,
+   
     type:[String],
   
  },
@@ -98,29 +105,32 @@ const userShema = new mongoose.Schema(
     timestamps:true,
    });
 
-    const User = mongoose.model("User",userShema);
-    module.exports = User;
 
 
-    userShema.methods.getJWt =async function () {
+    userSchema.methods.getJWt =async function() {
       const user = this;
 
 
-     const token = await  jwt.sign({_id:user.id},"Atul@181523", {
+     const token = await  jwt.sign({_id: user.id },"Atul@181523", {
       expiresIn :"7d",
-     })
-    return token;
+     }) 
+    return token;   
 
     };
 
 
-    userShema.methods.validatePassword = async  function (passwordInputByUser) {
+    userSchema.methods.validatePassword = async  function (passwordInputByUser) {
       const  user = this
-         const passswordhash = user.password 
-        const ispasswordvalid = await  bcrypt.compare(passwordInputByUser, passswordhash); 
+         const passwordHash = user.password;
+
+
+        const ispasswordvalid = await  bcrypt.compare(
+          passwordInputByUser,
+          passwordHash   
+          ); 
  
         return ispasswordvalid;
     }
 
 
-    module.exports = mongoose.model("User".userShema)
+    module.exports = mongoose.model("User", userSchema);
