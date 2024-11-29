@@ -46,7 +46,8 @@ app.use('/', admin);
 connectDB()
 .then( ()=> {
     console.log(" db connection suucesfull")
-    app.listen(3000, ()=> {
+    const port = process.env.PORT || 3000;
+    app.listen(port, ()=> {
         console.log(" server is activate on 3000 ")});
 })
 .catch(err=>{

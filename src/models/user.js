@@ -120,12 +120,6 @@ suspensionEndTime: Date,
 timestamps: true,
 })
   
-  
- // {
-  //  timestamps:true,
-  // });
-
-
 
     userSchema.methods.getJWt =async function() {
       const user = this;
