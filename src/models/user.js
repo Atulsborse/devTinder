@@ -96,14 +96,26 @@ const userSchema = new mongoose.Schema(
   default:" He ther i am using devtinder",
   trim:true,
   maxLenth:20,
-}
+},
 
-   },
+role: {
+  type: String,
+  default: 'user',
+  enum: ['user', 'admin'],
+},
+isSuspended: {
+  type: Boolean,
+  default: false,
+},
+suspensionEndTime: Date,
+}, {
+timestamps: true,
+})
   
   
-  {
-    timestamps:true,
-   });
+ // {
+  //  timestamps:true,
+  // });
 
 
 
@@ -111,8 +123,8 @@ const userSchema = new mongoose.Schema(
       const user = this;
 
 
-     const token = await  jwt.sign({_id: user.id },"Atul@181523", {
-      expiresIn :"7d",
+     const token = await  jwt.sign({_id: user.id, role:user.role },"Atul@181523", {
+      expiresIn :"1d",
      }) 
     return token;   
 

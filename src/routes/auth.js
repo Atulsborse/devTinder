@@ -12,7 +12,7 @@ authrouter.post ("/singup", async (req,res)=>{
 //validation of data 
 validatesingupdata(req); 
 
-const {FirstName,LastName ,emailid,password} = req.body;
+const {FirstName,LastName ,emailid,password, role} = req.body;
     // Encrypt the password
     const passswordhash =  await bcrypt.hash(password, 10);
       console.log(passswordhash);
@@ -23,8 +23,7 @@ const {FirstName,LastName ,emailid,password} = req.body;
        LastName,
        emailid,
        password:passswordhash,
-
-
+       role:role ||'user'
 
       });
         await user.save();
