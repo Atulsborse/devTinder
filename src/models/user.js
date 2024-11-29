@@ -53,49 +53,57 @@ const userSchema = new mongoose.Schema(
    min:18
   },
 
-   gender: {
-    // type: String,
-    // enum:{
-    //   values: ["male", "female", "others"],
-    //   message: `{VALUE} "is not a valid gender type` , 
-    // },
+  //  gender: {
+  //   type: String,
+  //   enum:{
+  //     values: ["male", "female", "others"],
+  //     message: `{VALUE} "is not a valid gender type` , 
+  //   },
    
- // costome validation
- type:String,
- validate(value){
-  if(!["male","female","others"].includes(value)){
-    throw new Error("gender is not valid")
-  }
- }
+ // costom validation 
+gender: {
+  type: String,
+  validate(value) {
+    if (!["male", "female", "others"].includes(value)) {
+      throw new Error("Gender is not valid");
+    }
+  },
 },
   
 
   skills:{
-   
-   
     type:[String],
+    validate: {
+      validator: function (v) {
+        if (v.length > 10) {
+          throw new Error("You can add up to 10 skills only");
+        }
+        v.forEach(skill => {
+          if (skill.length > 20) {
+            throw new Error("Each skill can be up to 20 characters long");
+          }
+        });
+        return true;
+      },
+      message: "Skills validation failed",
+    },
   
  },
 
  photoURL:{
 
   type:String,
-  
-
   validate(value){
     if(!validator.isURL(value)){
     throw new Error("invalide url adress" + value);
-    
-
 }
   },
  },
- about:{
-
-  type:String,
-  default:" He ther i am using devtinder",
-  trim:true,
-  maxLenth:20,
+ about:{ 
+  type: String,
+  default: "Hi,I am using DevTinder",
+  trim: true,
+  minlength: 20,
 },
 
 role: {
