@@ -11,6 +11,7 @@ const flash = require('connect-flash');
 const admin = require('./routes/admin');
 
 const app = express ()
+const port = process.env.PORT || 3000;
 const cookieParser = require("cookie-parser"); 
 
 
@@ -60,7 +61,7 @@ connectDB()
   .then(() => {
     console.log("DB connection successful");
 
-    const port = process.env.PORT || 3000;
+    
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
