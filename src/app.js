@@ -43,19 +43,31 @@ app.use('/', admin);
 
 
 
+// connectDB()
+// .then( ()=> {
+//     console.log(" db connection suucesfull")
+//     const port = process.env.PORT || 3000;
+//     app.listen(port, ()=> {
+//         console.log(" server is activate on 3000 ")});
+// })
+// .catch(err=>{
+//  console.error(" Db can not connected")
+
+
+// })
+
 connectDB()
-.then( ()=> {
-    console.log(" db connection suucesfull")
+  .then(() => {
+    console.log("DB connection successful");
+
     const port = process.env.PORT || 3000;
-    app.listen(port, ()=> {
-        console.log(" server is activate on 3000 ")});
-})
-.catch(err=>{
- console.error(" Db can not connected")
-
-
-})
-
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+  })
+  .catch(err => {
+    console.error("DB connection failed", err);
+  });
 
 
  
