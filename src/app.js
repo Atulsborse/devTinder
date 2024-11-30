@@ -9,9 +9,10 @@ const passport = require('passport');
 const session = require('express-session');
 const flash = require('connect-flash');
 const admin = require('./routes/admin');
+require('dotenv').config();
 
 const app = express ()
-const port = process.env.PORT || 4000;
+
 const cookieParser = require("cookie-parser"); 
 
 
@@ -60,8 +61,7 @@ app.use('/', admin);
 connectDB()
   .then(() => {
     console.log("DB connection successful");
-
-    
+    const port = process.env.PORT || 3000;
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
